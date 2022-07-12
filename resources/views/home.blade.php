@@ -5,6 +5,15 @@
 
     <div class="row justify-content-center">
         <div class="col-md-8">
+            @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
             <ul class="nav justify-content-between mb-2">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -91,7 +100,10 @@
 
 
                
-           
+           <div>
+            {{$orders->Links()}}
+           </div>
+
 
             <div>
                 

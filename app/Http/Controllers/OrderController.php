@@ -11,8 +11,8 @@ class OrderController extends Controller
 
     public function index()
     {
-        $orders = DB::table('orders')->get();
-     
+        $orders = DB::table('orders')->paginate(10);
+
 
         return view('home', ['orders' => $orders]);
     }
@@ -27,6 +27,13 @@ class OrderController extends Controller
     public function store(Request $request)
     {
 
+        $validatedData = $request->validate([
+            'name' => ['required', 'max:100'],
+            'email' => ['required', 'email'],
+            'message' => ['required', 'max:250'],
+        ]);
+        
+
         $order = new Order();
         $order->name = $request->input('name');
         $order->email = $request->input('email');
@@ -39,31 +46,30 @@ class OrderController extends Controller
 
     public function show($filter)
     {
-        
-        
+
+
         switch ($filter) {
             case 'new':
                 $orders = DB::table('orders')
                     ->latest()
-                    ->get();
+                    ->paginate(10);
                 return view('home', ['orders' => $orders]);
             case 'old':
                 $orders = DB::table('orders')
                     ->oldest()
-                    ->get();
+                    ->paginate(10);
                 return view('home', ['orders' => $orders]);
             case 'active':
-                $orders = DB::table('orders')->orderBy('status', 'ASC')
-                ->get();
+                $orders = DB::table('orders')
+                    ->orderBy('status', 'ASC')
+                    ->paginate(10);
                 return view('home', ['orders' => $orders]);
             case 'resolved':
-                $orders = DB::table('orders')->orderBy('status', 'DESC')
-                ->get();
+                $orders = DB::table('orders')
+                    ->orderBy('status', 'DESC')
+                    ->paginate(10);
                 return view('home', ['orders' => $orders]);
         }
-
-      
-        
     }
 
     public function edit($id)
@@ -74,6 +80,11 @@ class OrderController extends Controller
 
     public function update(Request $request, $id)
     {
+
+        $validatedData = $request->validate([
+            'comment' => ['required', 'max:250']
+        ]);
+
         $order = Order::findOrFail($id);
         $order->comment = $request->input('comment');
         $order->status = 'Resolved';
@@ -81,6 +92,4 @@ class OrderController extends Controller
 
         return redirect()->route('home')->with('success', 'Заявка обновлена');
     }
-
-
 }
