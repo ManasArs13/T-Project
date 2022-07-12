@@ -27,7 +27,7 @@ class OrderController extends Controller
     public function store(Request $request)
     {
 
-        $validatedData = $request->validate([
+        $request->validate([
             'name' => ['required', 'max:100'],
             'email' => ['required', 'email'],
             'message' => ['required', 'max:250'],
@@ -81,7 +81,7 @@ class OrderController extends Controller
     public function update(Request $request, $id)
     {
 
-        $validatedData = $request->validate([
+        $request->validate([
             'comment' => ['required', 'max:250']
         ]);
 
