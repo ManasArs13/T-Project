@@ -2,9 +2,36 @@
 
 @section('content')
 <div class="container">
+
     <div class="row justify-content-center">
         <div class="col-md-8">
-
+            <ul class="nav justify-content-between mb-2">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      По дате
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <li><a class="dropdown-item" href="{{ route('show', ['filter' => 'new']) }}">Сначала новые</a></li>
+                      <li><a class="dropdown-item" href="{{ route('show', ['filter' => 'old']) }}">Сначала старые</a></li>
+                      
+                    </ul>
+                  </li>
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      По статусу
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <li><a class="dropdown-item" href="{{ route('show', ['filter' => 'active']) }}">Сначало активные</a></li>
+                      <li><a class="dropdown-item" href="{{ route('show', ['filter' => 'resolved']) }}">Сначало решённые</a></li>
+                      
+                    </ul>
+                  </li>
+              </ul>
+        </div>
+        </div>        
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            
             @if(session('success'))
             <div class="alert alert-success mb-3">
                 {{ session('success') }}
@@ -12,7 +39,15 @@
         @endif
 
             
-                
+            @if(count($orders) === 0)
+            <div class="alert alert-warning mb-3">
+              Заявок нет
+            </div>
+            @endif
+
+
+            
+
 
 
                 @foreach ($orders as $order)
@@ -56,10 +91,7 @@
 
 
                
-           <div>
-            {{$orders->Links()}}
-           </div>
-
+           
 
             <div>
                 

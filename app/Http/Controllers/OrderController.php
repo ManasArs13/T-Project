@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Order;
 
@@ -10,8 +11,8 @@ class OrderController extends Controller
 
     public function index()
     {
-       $orders = Order::paginate(1);
-      //  $orders = Order::all();
+        $orders = DB::table('orders')->get();
+     
 
         return view('home', ['orders' => $orders]);
     }
@@ -36,9 +37,33 @@ class OrderController extends Controller
         return redirect()->route('create')->with('success', 'Заявка успешно отправлена! Ждите подтверждения.');
     }
 
-    public function show($id)
+    public function show($filter)
     {
-        //
+        
+        
+        switch ($filter) {
+            case 'new':
+                $orders = DB::table('orders')
+                    ->latest()
+                    ->get();
+                return view('home', ['orders' => $orders]);
+            case 'old':
+                $orders = DB::table('orders')
+                    ->oldest()
+                    ->get();
+                return view('home', ['orders' => $orders]);
+            case 'active':
+                $orders = DB::table('orders')->orderBy('status', 'ASC')
+                ->get();
+                return view('home', ['orders' => $orders]);
+            case 'resolved':
+                $orders = DB::table('orders')->orderBy('status', 'DESC')
+                ->get();
+                return view('home', ['orders' => $orders]);
+        }
+
+      
+        
     }
 
     public function edit($id)
