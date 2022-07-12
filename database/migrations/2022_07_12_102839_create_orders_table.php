@@ -18,7 +18,7 @@ class CreateOrdersTable extends Migration
             $table->timestamps();
             $table->string('name');
             $table->string('email');
-            $table->enum('status', ['Resolved', 'Active']);
+            $table->enum('status', ['Active', 'Resolved']);
             $table->string('message');
             $table->string('comment')->nullable();
         });
