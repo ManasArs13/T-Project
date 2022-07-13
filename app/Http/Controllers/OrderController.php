@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ConfirmEmail; 
 use App\Order;
 
 class OrderController extends Controller
@@ -11,6 +13,9 @@ class OrderController extends Controller
 
     public function index()
     {
+        
+       
+
         $orders = DB::table('orders')->paginate(10);
 
 
@@ -72,12 +77,7 @@ class OrderController extends Controller
         }
     }
 
-    public function edit($id)
-    {
-        //
-    }
-
-
+   
     public function update(Request $request, $id)
     {
 
@@ -89,6 +89,9 @@ class OrderController extends Controller
         $order->comment = $request->input('comment');
         $order->status = 'Resolved';
         $order->update();
+        $mail = $order->email;
+
+        Mail::to($mail)->send(new ConfirmEmail());
 
         return redirect()->route('home')->with('success', 'Заявка обновлена');
     }
